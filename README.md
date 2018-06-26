@@ -4,7 +4,7 @@ Spiders shoot webbing at you - slinging webs from a distance, or when they hit y
 
 Be careful!  This makes spiders more difficult foes, since you get stuck in the webbing.
 
-![Web Slinger Example](https://github.com/Stormwind99/WebSlinger/raw/newmaster/src/resources/screenshots/WebSlingerExample.gif)
+![Web Slinger Example](https://github.com/Stormwind99/WebSlinger/raw/newmaster/other/screenshots/WebSlingerExample.gif)
 
 ## FAQ
 

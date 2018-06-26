@@ -1,4 +1,4 @@
-package josephcsible.webshooter;
+package com.wumple.webslinger;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderSnowball;
@@ -18,12 +18,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@ObjectHolder("webshooter")
+@ObjectHolder("webslinger")
 public class ObjectHandler
 {
 	private static int entityID = 0;
 
-	//@ObjectHolder("webshooter:webbing")
+	//@ObjectHolder("webslinger:webbing")
 	public static Item webbing = null;
 
 	public static final SoundEvent WEBBING_SHOOT = SoundEvents.ENTITY_SNOWBALL_THROW;
@@ -73,7 +73,7 @@ public class ObjectHandler
 		{
 			EntityEntry entry = EntityEntryBuilder.create()
 					.entity(EntityWebbing.class)
-					.id(new ResourceLocation("webshooter", "webbing"), entityID++)
+					.id(new ResourceLocation("webslinger", "webbing"), entityID++)
 					.name("webbing")
 					.tracker(64, 10, true)
 					.build();

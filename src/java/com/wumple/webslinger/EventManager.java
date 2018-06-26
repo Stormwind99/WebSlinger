@@ -1,4 +1,4 @@
-package josephcsible.webshooter;
+package com.wumple.webslinger;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntitySpider;
@@ -12,12 +12,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class EventManager
 {
-
-	/*
-	 * Mod authors: If your mod adds custom spiders, and you want them to work with
-	 * this mod, make them subclass EntitySpider (like vanilla cave spiders do).
-	 */
-
 	/*
 	 * Add ranged webbing attack AI to spiders
 	 */
@@ -51,7 +45,7 @@ public class EventManager
 
 	private static void addAIToSpider(EntitySpider entity)
 	{
-		if (ModConfig.slingWebbing == true)
+		if (ModConfig.webSlinging == true)
 		{
 			entity.tasks.addTask(7, new AIWebbingAttack(entity));
 		}
@@ -62,7 +56,7 @@ public class EventManager
 		World world = target.world;
 		BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
 
-		if(ModConfig.webChance <= world.rand.nextDouble())
+		if(ModConfig.webMeleeChance <= world.rand.nextDouble())
 		{
 			return;
 		}

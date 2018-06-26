@@ -1,14 +1,14 @@
 [
 {
-  "modid": "webshooter",
-  "name": "WebShooter",
-  "description": "Spider attacks cause their target to get covered in a cobweb",
+  "modid": "webslinger",
+  "name": "Web Slinger",
+  "description": "Spiders shoot webbing at you - slinging webs from a distance, or when they hit you in melee!",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "http://minecraft.curseforge.com/projects/webshooter",
+  "url": "http://minecraft.curseforge.com/projects/webslinger",
   "updateJSON": "$updatejson",
-  "authorList": ["Joseph C. Sible", "Stormwind99"],
-  "credits": "",
+  "authorList": ["Stormwind99", "Joseph C. Sible"],
+  "credits": "PlayerInWebMessage is from the WebShooter mod (which inspired this mod) by Joseph C. Sible",
   "logoFile": "logo.png",
   "dependencies": [
     "mod_MinecraftForge"

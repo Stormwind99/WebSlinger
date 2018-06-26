@@ -1,5 +1,6 @@
-package josephcsible.webshooter;
+package com.wumple.webslinger;
 
+import josephcsible.webshooter.PlayerInWebMessage;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -129,7 +130,7 @@ public class EntityWebbing extends EntityThrowable
 		 if (!worldIn.isRemote)
 		 {
 			 entity = new EntityWebbing(worldIn, entityIn);
-			 float inaccuracy = (float)ModConfig.slingInaccuracy;
+			 float inaccuracy = (float)ModConfig.webSlingInaccuracy;
 			 entity.shoot(entityIn, entityIn.rotationPitch, entityIn.rotationYaw, 0.0F, 1.1F, inaccuracy);
 			 worldIn.spawnEntity(entity);
 		 }
@@ -144,7 +145,7 @@ public class EntityWebbing extends EntityThrowable
 		 boolean stick = true;
 
 		 if (!oldBlock.isReplaceable(world, pos) ||
-				 (!ModConfig.allowReplacement && !oldBlock.isAir(state, world, pos)) )
+				 (!ModConfig.allowWebReplacement && !oldBlock.isAir(state, world, pos)) )
 		 {
 			 stick = false;
 		 }
@@ -173,7 +174,7 @@ public class EntityWebbing extends EntityThrowable
 				 // attack resolves. This will result in the client thinking the player got knocked back
 				 // further than they really did, which in turn will result in a "player moved wrongly"
 				 // message on the server.
-				 WebShooter.netWrapper.sendTo(new PlayerInWebMessage(pos), (EntityPlayerMP)target);
+				 WebSlinger.networkWrapper.sendTo(new PlayerInWebMessage(pos), (EntityPlayerMP)target);
 			 }
 		 }
 	 }    

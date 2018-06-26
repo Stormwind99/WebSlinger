@@ -1,4 +1,4 @@
-package josephcsible.webshooter;
+package com.wumple.webslinger;
 
 public class Reference
 {

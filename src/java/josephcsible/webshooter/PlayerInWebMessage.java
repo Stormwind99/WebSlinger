@@ -26,8 +26,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class PlayerInWebMessage implements IMessage {
+		
 	// The coordinates of the web block
 	public BlockPos pos;
 
@@ -63,4 +66,9 @@ public class PlayerInWebMessage implements IMessage {
 			return null;
 		}
 	}
+	
+	public static void register(SimpleNetworkWrapper netWrapper) {
+		netWrapper.registerMessage(PlayerInWebMessage.Handler.class, PlayerInWebMessage.class, 0, Side.CLIENT);
+	}
+
 }

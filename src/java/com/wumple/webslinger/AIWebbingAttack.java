@@ -1,4 +1,4 @@
-package josephcsible.webshooter;
+package com.wumple.webslinger;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -57,14 +57,14 @@ class AIWebbingAttack extends EntityAIBase
             }
 			 */
 
-			if (this.attackTimer == ModConfig.reshootTime)
+			if (this.attackTimer == ModConfig.webReshootTime)
 			{
 				// MAYBE source.world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0);
 
 				EntityWebbing.sling(parentEntity.world, parentEntity);
 
-				double cooldown = ModConfig.reshootTime +
-						ModConfig.reshootTime * parentEntity.world.rand.nextFloat() * ModConfig.slingVariance;
+				double cooldown = ModConfig.webReshootTime +
+						ModConfig.webReshootTime * parentEntity.world.rand.nextFloat() * ModConfig.webSlingVariance;
 				
 				this.attackTimer -= cooldown;
 				

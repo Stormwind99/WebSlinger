@@ -1,4 +1,4 @@
-package josephcsible.webshooter;
+package com.wumple.webslinger;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

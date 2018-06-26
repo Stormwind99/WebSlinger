@@ -1,4 +1,4 @@
-package josephcsible.webshooter;
+package com.wumple.webslinger;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +17,7 @@ public class ItemWebbing extends Item
 		this.maxStackSize = 16;
 		this.setCreativeTab(CreativeTabs.MISC);
 
-		ObjectHandler.RegistrationHandler.nameHelper(this, "webshooter:webbing");
+		ObjectHandler.RegistrationHandler.nameHelper(this, "webslinger:webbing");
 	}
 
 	/**

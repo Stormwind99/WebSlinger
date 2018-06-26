@@ -1,4 +1,4 @@
-package josephcsible.webshooter;
+package com.wumple.webslinger;
 
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
@@ -14,23 +14,23 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class ModConfig {
 
-	@Name("Melee web chance")
+	@Name("Web melee chance")
 	@Comment("Chance per melee attack that a spider will create a web")
 	@RangeDouble(min = 0.0, max = 1.0)
-	public static double webChance = 0.15;
+	public static double webMeleeChance = 0.15;
 
-	@Name("Allow replacement")
-	@Comment("Whether webs are able to replace water, lava, fire, snow, vines, and any mod-added blocks declared as replaceable")
-	public static boolean allowReplacement = true;
+	@Name("Web replacement")
+	@Comment("Webs replace water, lava, fire, snow, vines, etc. - any replaceable block")
+	public static boolean allowWebReplacement = true;
 
 	@Name("Sling webbing")
 	@Comment("Spiders can spit webbing from a distance")
-	public static boolean slingWebbing = true;
+	public static boolean webSlinging = true;
 
 	@Name("Sling cooldown")
 	@Comment("Time between web slings")
 	@RangeInt(min = 1)
-	public static int reshootTime = 45;
+	public static int webReshootTime = 45;
 
 	@Name("Webbing on web")
 	@Comment("Webbing hitting web creates more web")
@@ -38,11 +38,11 @@ public class ModConfig {
 	
 	@Name("Sling variance")
 	@Comment("Time variance between a spider's web slings")
-	public static double slingVariance = 2.0F;
+	public static double webSlingVariance = 2.0F;
 	
 	@Name("Sling inaccuracy")
 	@Comment("Inaccuracy of web slings")
-	public static double slingInaccuracy = 6.0F;
+	public static double webSlingInaccuracy = 6.0F;
 
 	@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 	private static class EventHandler {

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "webshooter:items/webbing"
+    "layer0": "webslinger:items/webbing"
   }
 }

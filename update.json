@@ -1,10 +1,11 @@
 {
   "homepage": "https://github.com/Stormwind99/WebSlinger",
   "promos": {
-    "1.12.2-latest": "1.1.0",
-    "1.12.2-recommended": "1.1.0"
+    "1.12.2-latest": "1.1.1",
+    "1.12.2-recommended": "1.1.1"
   },
   "1.12.2": {
+    "1.1.1": "Workaround for unexpected AIWebbingAttack NPE",
     "1.1.0": "Adding web slinging from a distance, webbing item, new config, etc.",
     "1.0.0": "Started"
   }

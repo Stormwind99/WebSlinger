@@ -74,11 +74,12 @@ public class EntityWebbing extends EntityThrowable
 	 protected void onImpact(RayTraceResult result)
 	 {
 		 boolean doit = true;
+		 EntityLivingBase thrower = getThrower();
 
-		 if (result.entityHit != null)
+		 if ((result.entityHit != null) && (result.entityHit != thrower))
 		 {
 			 // 0 damage attack
-			 result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 0);
+			 result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, thrower), 0);
 		 }
 
 		 if (result.typeOfHit != RayTraceResult.Type.MISS)
@@ -107,7 +108,7 @@ public class EntityWebbing extends EntityThrowable
 
 			 if (doit)
 			 {
-				 onHit(world, pos, this.getThrower(), result.entityHit);
+				 onHit(world, pos, thrower, result.entityHit);
 			 }
 		 }
 

@@ -3,6 +3,7 @@ package com.wumple.webslinger;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.world.World;
 
 class AIWebbingAttack extends EntityAIBase
 {
@@ -42,11 +43,16 @@ class AIWebbingAttack extends EntityAIBase
 	 */
 	public void updateTask()
 	{
-		EntityLivingBase entitylivingbase = this.parentEntity.getAttackTarget();
+		// got a NPE below once with parentEntity or entitylivingbase being null
+		EntityLivingBase entitylivingbase = (parentEntity != null) ? this.parentEntity.getAttackTarget() : null;	 
 
-		if ( entitylivingbase.getDistanceSq(this.parentEntity) < maxDistance &&
+		if ( (parentEntity != null) && 
+				(entitylivingbase != null) &&
+				(entitylivingbase.getDistanceSq(this.parentEntity) < maxDistance) &&
 				this.parentEntity.canEntityBeSeen(entitylivingbase) )
 		{
+			World world = parentEntity.world;
+			
 			++this.attackTimer;
 
 			/*
@@ -61,10 +67,10 @@ class AIWebbingAttack extends EntityAIBase
 			{
 				// MAYBE source.world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0);
 
-				EntityWebbing.sling(parentEntity.world, parentEntity);
+				EntityWebbing.sling(world, parentEntity);
 
 				double cooldown = ModConfig.webReshootTime +
-						ModConfig.webReshootTime * parentEntity.world.rand.nextFloat() * ModConfig.webSlingVariance;
+						ModConfig.webReshootTime * world.rand.nextFloat() * ModConfig.webSlingVariance;
 				
 				this.attackTimer -= cooldown;
 				

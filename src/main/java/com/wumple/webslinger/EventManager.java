@@ -12,67 +12,67 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class EventManager
 {
-	/*
-	 * Add ranged webbing attack AI to spiders
-	 */
-	@SubscribeEvent
-	public static void onEntitySpawn(EntityJoinWorldEvent event)
-	{ 
-		if (event.getEntity() instanceof EntitySpider)
-		{
-			addAIToSpider((EntitySpider)event.getEntity());
-		}
-	}
+    /*
+     * Add ranged webbing attack AI to spiders
+     */
+    @SubscribeEvent
+    public static void onEntitySpawn(EntityJoinWorldEvent event)
+    {
+        if (event.getEntity() instanceof EntitySpider)
+        {
+            addAIToSpider((EntitySpider) event.getEntity());
+        }
+    }
 
-	/*
-	 * Handle melee webbing attack for spiders
-	 */
-	@SubscribeEvent
-	public static void onLivingAttack(LivingAttackEvent event)
-	{
-		Entity immediateSource = event.getSource().getImmediateSource();
-		Entity trueSource = event.getSource().getTrueSource();
-		Entity target = event.getEntity();
+    /*
+     * Handle melee webbing attack for spiders
+     */
+    @SubscribeEvent
+    public static void onLivingAttack(LivingAttackEvent event)
+    {
+        Entity immediateSource = event.getSource().getImmediateSource();
+        Entity trueSource = event.getSource().getTrueSource();
+        Entity target = event.getEntity();
 
-		// if web is shot, let EntityWebbing handle it - so immediateSource and trueSource must be spider 
-		if ((immediateSource instanceof EntitySpider) && (immediateSource == trueSource))
-		{
-			tryAttack(immediateSource, trueSource, target);
-		}
-	}
+        // if web is shot, let EntityWebbing handle it - so immediateSource and trueSource must be spider
+        if ((immediateSource instanceof EntitySpider) && (immediateSource == trueSource))
+        {
+            tryAttack(immediateSource, trueSource, target);
+        }
+    }
 
-	// ----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
 
-	private static void addAIToSpider(EntitySpider entity)
-	{
-		if (ModConfig.webSlinging == true)
-		{
-			entity.tasks.addTask(7, new AIWebbingAttack(entity));
-		}
-	}
+    private static void addAIToSpider(EntitySpider entity)
+    {
+        if (ModConfig.webSlinging == true)
+        {
+            entity.tasks.addTask(7, new AIWebbingAttack(entity));
+        }
+    }
 
-	public static void tryAttack(Entity immediateSource, Entity source, Entity target) 
-	{
-		World world = target.world;
-		BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
+    public static void tryAttack(Entity immediateSource, Entity source, Entity target)
+    {
+        World world = target.world;
+        BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
 
-		if(ModConfig.webMeleeChance <= world.rand.nextDouble())
-		{
-			return;
-		}
+        if (ModConfig.webMeleeChance <= world.rand.nextDouble())
+        {
+            return;
+        }
 
-		if ((target != null) && (immediateSource != null))
-		{
-			double distance = immediateSource.getDistanceSq(target);
+        if ((target != null) && (immediateSource != null))
+        {
+            double distance = immediateSource.getDistanceSq(target);
 
-			// some mods somehow make LivingAttackEvent fire when spider is still far away
-			// so make it so spider only does webbing if very close
-			if (distance > 2)
-			{
-				return;
-			}
-		}
+            // some mods somehow make LivingAttackEvent fire when spider is still far away
+            // so make it so spider only does webbing if very close
+            if (distance > 2)
+            {
+                return;
+            }
+        }
 
-		EntityWebbing.onHit(world, pos, source, target);
-	}
+        EntityWebbing.onHit(world, pos, source, target);
+    }
 }

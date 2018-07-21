@@ -21,63 +21,67 @@ import net.minecraftforge.registries.IForgeRegistry;
 @ObjectHolder("webslinger")
 public class ObjectHandler
 {
-	private static int entityID = 0;
+    private static int entityID = 0;
 
-	//@ObjectHolder("webslinger:webbing")
-	public static Item webbing = null;
+    // @ObjectHolder("webslinger:webbing")
+    public static Item webbing = null;
 
-	public static final SoundEvent WEBBING_SHOOT = SoundEvents.ENTITY_SNOWBALL_THROW;
-	public static final SoundEvent WEBBING_STICK = SoundEvents.BLOCK_SNOW_HIT;
-	public static final SoundEvent WEBBING_NONSTICK = SoundEvents.BLOCK_SNOW_BREAK;
+    public static final SoundEvent WEBBING_SHOOT = SoundEvents.ENTITY_SNOWBALL_THROW;
+    public static final SoundEvent WEBBING_STICK = SoundEvents.BLOCK_SNOW_HIT;
+    public static final SoundEvent WEBBING_NONSTICK = SoundEvents.BLOCK_SNOW_BREAK;
 
-	@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
-	public static class RegistrationHandler extends RegistrationHelpers
-	{
-		@SubscribeEvent
-		public static void registerItems(RegistryEvent.Register<Item> event) {
-			final IForgeRegistry<Item> registry = event.getRegistry();
+    @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
+    public static class RegistrationHandler extends RegistrationHelpers
+    {
+        @SubscribeEvent
+        public static void registerItems(RegistryEvent.Register<Item> event)
+        {
+            final IForgeRegistry<Item> registry = event.getRegistry();
 
-			// MAYBE webbing = Item.REGISTRY.getObject(new ResourceLocation("minecraft:web"));
-			webbing = regHelper(registry, new ItemWebbing());
+            // MAYBE webbing = Item.REGISTRY.getObject(new ResourceLocation("minecraft:web"));
+            webbing = regHelper(registry, new ItemWebbing());
 
-			registerTileEntities();
-		}
+            registerTileEntities();
+        }
 
-		@SubscribeEvent
-		public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event) {
-			//esky_open = registerSound(event.getRegistry(), "foodfunk:esky_open");
-		}
+        @SubscribeEvent
+        public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event)
+        {
+            // esky_open = registerSound(event.getRegistry(), "foodfunk:esky_open");
+        }
 
-		public static void registerTileEntities() {
-			//registerTileEntity(TileEntityEsky.class, "foodfunk:esky");
-		}
+        public static void registerTileEntities()
+        {
+            // registerTileEntity(TileEntityEsky.class, "foodfunk:esky");
+        }
 
-		@SideOnly(Side.CLIENT)
-		@SubscribeEvent
-		public static void registerRenders(ModelRegistryEvent event)
-		{
-			registerRender(webbing);
+        @SideOnly(Side.CLIENT)
+        @SubscribeEvent
+        public static void registerRenders(ModelRegistryEvent event)
+        {
+            registerRender(webbing);
 
-			RenderingRegistry.registerEntityRenderingHandler(EntityWebbing.class, manager -> new RenderSnowball<>(manager, webbing, Minecraft.getMinecraft().getRenderItem()));
+            RenderingRegistry.registerEntityRenderingHandler(EntityWebbing.class,
+                    manager -> new RenderSnowball<>(manager, webbing, Minecraft.getMinecraft().getRenderItem()));
 
-			//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFreezer.class, new TileEntityFreezerRenderer());
-		}
+            // ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFreezer.class, new TileEntityFreezerRenderer());
+        }
 
-		@SubscribeEvent
-		public static void entityRegistration(final RegistryEvent.Register<EntityEntry> event)
-		{
-			registerEntity(event.getRegistry());
-		}
+        @SubscribeEvent
+        public static void entityRegistration(final RegistryEvent.Register<EntityEntry> event)
+        {
+            registerEntity(event.getRegistry());
+        }
 
-		public static void registerEntity(IForgeRegistry<EntityEntry> registry)
-		{
-			EntityEntry entry = EntityEntryBuilder.create()
-					.entity(EntityWebbing.class)
-					.id(new ResourceLocation("webslinger", "webbing"), entityID++)
-					.name("webbing")
-					.tracker(64, 10, true)
-					.build();
-			registry.register(entry);
-		}
-	}
+        public static void registerEntity(IForgeRegistry<EntityEntry> registry)
+        {
+            EntityEntry entry = EntityEntryBuilder.create()
+                    .entity(EntityWebbing.class)
+                    .id(new ResourceLocation("webslinger", "webbing"), entityID++)
+                    .name("webbing")
+                    .tracker(64, 10, true)
+                    .build();
+            registry.register(entry);
+        }
+    }
 }

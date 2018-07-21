@@ -7,78 +7,75 @@ import net.minecraft.world.World;
 
 class AIWebbingAttack extends EntityAIBase
 {
-	private final static double maxDistance = 256.0D; // 16 is 256, 32 is 1024, 64 is 4096
-	private final EntityLiving parentEntity;
-	public int attackTimer;
+    private final static double maxDistance = 256.0D; // 16 is 256, 32 is 1024, 64 is 4096
+    private final EntityLiving parentEntity;
+    public int attackTimer;
 
-	public AIWebbingAttack(EntityLiving entity)
-	{
-		this.parentEntity = entity;
-	}
+    public AIWebbingAttack(EntityLiving entity)
+    {
+        this.parentEntity = entity;
+    }
 
-	/**
-	 * Returns whether the EntityAIBase should begin execution.
-	 */
-	public boolean shouldExecute()
-	{
-		return this.parentEntity.getAttackTarget() != null;
-	}
+    /**
+     * Returns whether the EntityAIBase should begin execution.
+     */
+    public boolean shouldExecute()
+    {
+        return this.parentEntity.getAttackTarget() != null;
+    }
 
-	/**
-	 * Execute a one shot task or start executing a continuous task
-	 */
-	public void startExecuting()
-	{
-		this.attackTimer = 0;
-	}
+    /**
+     * Execute a one shot task or start executing a continuous task
+     */
+    public void startExecuting()
+    {
+        this.attackTimer = 0;
+    }
 
-	/**
-	 * Reset the task's internal state. Called when this task is interrupted by another one
-	 */
-	public void resetTask()
-	{ }
+    /**
+     * Reset the task's internal state. Called when this task is interrupted by another one
+     */
+    public void resetTask()
+    {
+    }
 
-	/**
-	 * Keep ticking a continuous task that has already been started
-	 */
-	public void updateTask()
-	{
-		// got a NPE below once with parentEntity or entitylivingbase being null
-		EntityLivingBase entitylivingbase = (parentEntity != null) ? this.parentEntity.getAttackTarget() : null;	 
+    /**
+     * Keep ticking a continuous task that has already been started
+     */
+    public void updateTask()
+    {
+        // got a NPE below once with parentEntity or entitylivingbase being null
+        EntityLivingBase entitylivingbase = (parentEntity != null) ? this.parentEntity.getAttackTarget() : null;
 
-		if ( (parentEntity != null) && 
-				(entitylivingbase != null) &&
-				(entitylivingbase.getDistanceSq(this.parentEntity) < maxDistance) &&
-				this.parentEntity.canEntityBeSeen(entitylivingbase) )
-		{
-			World world = parentEntity.world;
-			
-			++this.attackTimer;
+        if ((parentEntity != null) &&
+                (entitylivingbase != null) &&
+                (entitylivingbase.getDistanceSq(this.parentEntity) < maxDistance) &&
+                this.parentEntity.canEntityBeSeen(entitylivingbase))
+        {
+            World world = parentEntity.world;
 
-			/*
-            // MAYBE play pre-shoot event
-            if (this.attackTimer == (reshootTime/2))
+            ++this.attackTimer;
+
+            /*
+             * // MAYBE play pre-shoot event if (this.attackTimer == (reshootTime/2)) { world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0); }
+             */
+
+            if (this.attackTimer == ModConfig.webReshootTime)
             {
-                world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0);
+                // MAYBE source.world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0);
+
+                EntityWebbing.sling(world, parentEntity);
+
+                double cooldown = ModConfig.webReshootTime +
+                        ModConfig.webReshootTime * world.rand.nextFloat() * ModConfig.webSlingVariance;
+
+                this.attackTimer -= cooldown;
+
             }
-			 */
-
-			if (this.attackTimer == ModConfig.webReshootTime)
-			{
-				// MAYBE source.world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0);
-
-				EntityWebbing.sling(world, parentEntity);
-
-				double cooldown = ModConfig.webReshootTime +
-						ModConfig.webReshootTime * world.rand.nextFloat() * ModConfig.webSlingVariance;
-				
-				this.attackTimer -= cooldown;
-				
-			}
-		}
-		else if (this.attackTimer > 0)
-		{
-			--this.attackTimer;
-		}
-	}
+        }
+        else if (this.attackTimer > 0)
+        {
+            --this.attackTimer;
+        }
+    }
 }

@@ -3,7 +3,6 @@ package com.wumple.webslinger;
 import org.apache.logging.log4j.Logger;
 
 import josephcsible.webshooter.PlayerInWebMessage;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -37,9 +36,5 @@ public class WebSlinger
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
-	{ }
-
-	@SubscribeEvent
-	public void onLivingAttack(LivingAttackEvent event)
 	{ }
 }

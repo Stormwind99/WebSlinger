@@ -24,10 +24,12 @@ public class EventHandler
     {
         TileEntity entity = event.getObject();
 
-        if (ConfigHandler.slingers.doesIt(entity))
+        int priority = ConfigHandler.getInstance().webSlingers.getValue(entity);
+        
+        if (ConfigHandler.getInstance().webSlingers.doesIt(priority))
         {
-            WebSlingerProvider provider = new WebSlingerProvider(WebSlinger.CAPABILITY, WebSlinger.DEFAULT_FACING, new TileEntityThing(entity));
-            event.addCapability(WebSlinger.ID, provider);
+            WebSlingerProvider provider = new WebSlingerProvider(WebSlingerCapability.CAPABILITY, WebSlingerCapability.DEFAULT_FACING, new TileEntityThing(entity), priority);
+            event.addCapability(WebSlingerCapability.ID, provider);
         }
     }
 
@@ -36,10 +38,12 @@ public class EventHandler
     {
         Entity entity = event.getObject();
 
-        if (ConfigHandler.slingers.doesIt(entity))
+        int priority = ConfigHandler.getInstance().webSlingers.getValue(entity);
+        
+        if (ConfigHandler.getInstance().webSlingers.doesIt(priority))
         {
-            WebSlingerProvider provider = new WebSlingerProvider(WebSlinger.CAPABILITY, WebSlinger.DEFAULT_FACING, new EntityThing(entity));
-            event.addCapability(WebSlinger.ID, provider);
+            WebSlingerProvider provider = new WebSlingerProvider(WebSlingerCapability.CAPABILITY, WebSlingerCapability.DEFAULT_FACING, new EntityThing(entity), priority);
+            event.addCapability(WebSlingerCapability.ID, provider);
         }
     }
 }

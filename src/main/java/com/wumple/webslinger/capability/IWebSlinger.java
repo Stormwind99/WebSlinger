@@ -7,5 +7,5 @@ public interface IWebSlinger
     /**
      * Set the owner of this capability, and init based on that owner
      */
-    void setOwner(IThing ownerIn);
+    void checkInit(IThing ownerIn, int taskPriority);
 }

@@ -32,16 +32,19 @@ public class EntityWebbing extends EntityThrowable
     public EntityWebbing(World worldIn)
     {
         super(worldIn);
+        init();
     }
 
     public EntityWebbing(World worldIn, EntityLivingBase throwerIn)
     {
         super(worldIn, throwerIn);
+        init();
     }
 
     public EntityWebbing(World worldIn, double x, double y, double z)
     {
         super(worldIn, x, y, z);
+        init();
     }
 
     public EntityWebbing(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ)
@@ -50,6 +53,12 @@ public class EntityWebbing extends EntityThrowable
         this.setSize(1.0F, 1.0F);
         this.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
         this.setPosition(x, y, z);
+        init();
+    }
+    
+    protected void init()
+    {
+        //MinecraftForge.EVENT_BUS.register(this);
     }
 
     public static void registerFixesWebbing(DataFixer fixer)
@@ -93,7 +102,7 @@ public class EntityWebbing extends EntityThrowable
             if (result.typeOfHit == RayTraceResult.Type.BLOCK)
             {
                 // if hitting another cobweb, don't create web - to avoid massive web areas
-                if (!ConfigContainer.webbingOnWeb)
+                if (!ConfigContainer.slinging.webbingOnWeb)
                 {
                     IBlockState state = world.getBlockState(result.getBlockPos());
                     Block oldBlock = state.getBlock();
@@ -108,6 +117,7 @@ public class EntityWebbing extends EntityThrowable
                 pos = result.entityHit.getPosition();
             }
 
+            // don't hit the thrower
             doit &= (this.getThrower() != result.entityHit);
 
             if (doit)
@@ -135,7 +145,7 @@ public class EntityWebbing extends EntityThrowable
         if (!worldIn.isRemote)
         {
             entity = new EntityWebbing(worldIn, entityIn);
-            float inaccuracy = (float) ConfigContainer.webSlingInaccuracy;
+            float inaccuracy = (float) ConfigContainer.slinging.webSlingInaccuracy;
             entity.shoot(entityIn, entityIn.rotationPitch, entityIn.rotationYaw, 0.0F, 1.1F, inaccuracy);
             worldIn.spawnEntity(entity);
         }

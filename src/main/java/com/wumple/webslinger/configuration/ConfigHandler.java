@@ -1,6 +1,6 @@
 package com.wumple.webslinger.configuration;
 
-import com.wumple.util.Reference;
+import com.wumple.webslinger.Reference;
 import com.wumple.util.config.MatchingConfig;
 //import com.wumple.util.config.MatchingConfigBase;
 import com.wumple.util.config.MatchingConfigBase;
@@ -10,14 +10,28 @@ import net.minecraftforge.common.config.ConfigManager;
 
 public class ConfigHandler
 {
-    public static boolean SLINGERS_DEFAULT = false;
+    public static ConfigHandler INSTANCE = null;
+    
+    public static final int SLINGERS_DEFAULT = -1;
 
-    public static MatchingConfig<Boolean> slingers = new MatchingConfig<Boolean>(ConfigContainer.slingers, SLINGERS_DEFAULT);
-
-    public static void init()
+    public MatchingConfig<Integer> webSlingers = new MatchingConfig<Integer>(ConfigContainer.slinging.ywebSlingers, SLINGERS_DEFAULT);
+    
+    public static ConfigHandler getInstance()
     {
-        slingers.addDefaultProperty(MatchingConfigBase.SPIDER_TAG, true);
+        if (INSTANCE == null)
+        {
+            INSTANCE = new ConfigHandler();
+        }
+        return INSTANCE;
+    }
+    
+    public ConfigHandler()
+    { }
+    
+    public void init()
+    {
+        webSlingers.addDefaultProperty(MatchingConfigBase.SPIDER_TAG, 3);
 
         ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
-    }
+     }
 }

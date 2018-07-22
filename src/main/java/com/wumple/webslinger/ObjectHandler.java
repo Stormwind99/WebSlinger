@@ -30,9 +30,9 @@ public class ObjectHandler
     // @ObjectHolder("webslinger:webbing")
     public static Item webbing = null;
 
-    public static final SoundEvent WEBBING_SHOOT = SoundEvents.ENTITY_SNOWBALL_THROW;
-    public static final SoundEvent WEBBING_STICK = SoundEvents.BLOCK_SNOW_HIT;
-    public static final SoundEvent WEBBING_NONSTICK = SoundEvents.BLOCK_SNOW_BREAK;
+    public static SoundEvent WEBBING_SHOOT;
+    public static SoundEvent WEBBING_STICK;
+    public static SoundEvent WEBBING_NONSTICK;
 
     @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
     public static class RegistrationHandler extends RegistrationHelpers
@@ -72,5 +72,13 @@ public class ObjectHandler
                     .build();
             registry.register(entry);
         }
+        
+        @SubscribeEvent
+        public static void soundRegistration(final RegistryEvent.Register<SoundEvent> event)
+        {
+            WEBBING_SHOOT = SoundEvents.ENTITY_SNOWBALL_THROW;
+            WEBBING_STICK = SoundEvents.BLOCK_SNOW_HIT;
+            WEBBING_NONSTICK = SoundEvents.BLOCK_SNOW_BREAK;
+        }        
     }
 }

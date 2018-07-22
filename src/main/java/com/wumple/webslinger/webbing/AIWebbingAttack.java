@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 public class AIWebbingAttack extends EntityAIBase
 {
     private final static double maxDistance = 256.0D; // 16 is 256, 32 is 1024, 64 is 4096
+    private final static double minDistance = 4.0D;
     private final EntityLiving parentEntity;
     public int attackTimer;
 
@@ -23,7 +24,10 @@ public class AIWebbingAttack extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        return this.parentEntity.getAttackTarget() != null;
+        // got a NPE below once with parentEntity or entitylivingbase being null
+        EntityLivingBase entitylivingbase = (parentEntity != null) ? this.parentEntity.getAttackTarget() : null;
+        
+        return (entitylivingbase != null) ? (entitylivingbase.getDistanceSq(this.parentEntity) >= minDistance) : false;
     }
 
     /**
@@ -62,14 +66,14 @@ public class AIWebbingAttack extends EntityAIBase
              * // MAYBE play pre-shoot event if (this.attackTimer == (reshootTime/2)) { world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0); }
              */
 
-            if (this.attackTimer == ConfigContainer.webReshootTime)
+            if (this.attackTimer >= ConfigContainer.slinging.webReshootTime)
             {
                 // MAYBE source.world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0);
 
                 EntityWebbing.sling(world, parentEntity);
 
-                double cooldown = ConfigContainer.webReshootTime +
-                        ConfigContainer.webReshootTime * world.rand.nextFloat() * ConfigContainer.webSlingVariance;
+                double cooldown = ConfigContainer.slinging.webReshootTime +
+                        ConfigContainer.slinging.webReshootTime * world.rand.nextFloat() * ConfigContainer.slinging.webSlingVariance;
 
                 this.attackTimer -= cooldown;
 

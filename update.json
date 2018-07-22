@@ -1,11 +1,11 @@
 {
   "homepage": "https://github.com/Stormwind99/WebSlinger",
   "promos": {
-    "1.12.2-latest": "1.2.0",
-    "1.12.2-recommended": "1.2.0"
+    "1.12.2-latest": "2.0.0",
+    "1.12.2-recommended": "2.0.0"
   },
   "1.12.2": {
-    "1.2.0": "Web slinging moved to capability.  Can be added to any entity via matching config.  Shared code now from WumpleUtil.",
+    "2.0.0": "Web slinging moved to capability.  Can be added to any entity via matching config.  Shared code now from WumpleUtil.  Increased spider AIWebbingAttack priority to 4 from 7.",
     "1.1.2": "Signing jar",
     "1.1.1": "Workaround for unexpected AIWebbingAttack NPE",
     "1.1.0": "Adding web slinging from a distance, webbing item, new config, etc.",

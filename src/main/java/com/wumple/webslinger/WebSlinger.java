@@ -30,7 +30,7 @@ public class WebSlinger
     {
         logger = event.getModLog();
 
-        com.wumple.webslinger.capability.WebSlinger.register();
+        com.wumple.webslinger.capability.WebSlingerCapability.register();
 
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         PlayerInWebMessage.register(networkWrapper);
@@ -44,9 +44,9 @@ public class WebSlinger
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        ConfigHandler.init();
+        ConfigHandler.getInstance().init();   
     }
-
+    
     @EventHandler
     public void onFingerprintViolation(FMLFingerprintViolationEvent event)
     {

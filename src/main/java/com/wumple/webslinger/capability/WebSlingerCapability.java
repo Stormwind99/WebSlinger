@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 //@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 @Mod.EventBusSubscriber
-public class WebSlinger implements IWebSlinger
+public class WebSlingerCapability implements IWebSlinger
 {
     // The {@link Capability} instance
     @CapabilityInject(IWebSlinger.class)
@@ -38,13 +38,13 @@ public class WebSlinger implements IWebSlinger
     IThing owner = null;
 
     @Override
-    public void setOwner(IThing ownerIn)
+    public void checkInit(IThing ownerIn, int taskPriority)
     {
         if (owner != ownerIn)
         {
             owner = ownerIn;
 
-            initialize();
+            initialize(taskPriority);
         }
     }
 
@@ -60,14 +60,14 @@ public class WebSlinger implements IWebSlinger
         return null;
     }
 
-    protected void initialize()
+    protected void initialize(int taskPriority)
     {
-        if (ConfigContainer.webSlinging == true)
+        if (ConfigContainer.slinging.webSlinging == true)
         {
             EntityLiving living = getOwner();
             if (living != null)
             {
-                living.tasks.addTask(7, new AIWebbingAttack(living));
+                living.tasks.addTask(taskPriority, new AIWebbingAttack(living));
             }
         }
     }
@@ -77,18 +77,18 @@ public class WebSlinger implements IWebSlinger
 
     public static void register()
     {
-        CapabilityManager.INSTANCE.register(IWebSlinger.class, new WebSlingerStorage(), () -> new WebSlinger());
+        CapabilityManager.INSTANCE.register(IWebSlinger.class, new WebSlingerStorage(), () -> new WebSlingerCapability());
     }
 
-    WebSlinger()
+    WebSlingerCapability()
     {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    WebSlinger(IThing ownerIn)
+    WebSlingerCapability(IThing ownerIn, int taskPriority)
     {
         this();
-        setOwner(ownerIn);
+        checkInit(ownerIn, taskPriority);
     }
 
     // ----------------------------------------------------------------------
@@ -106,7 +106,7 @@ public class WebSlinger implements IWebSlinger
         EntityLiving myowner = getOwner();
 
         // if web is shot, let EntityWebbing handle it - so immediateSource and trueSource must be spider
-        if ((immediateSource == myowner) && (immediateSource == trueSource))
+        if ((immediateSource != null) && (myowner != null) && (immediateSource == myowner) && (immediateSource == trueSource))
         {
             tryAttack(immediateSource, trueSource, target);
         }
@@ -116,7 +116,7 @@ public class WebSlinger implements IWebSlinger
     {
         World world = target.world;
      
-        if (ConfigContainer.webMeleeChance <= world.rand.nextDouble())
+        if (ConfigContainer.melee.webMeleeChance <= world.rand.nextDouble())
         {
             return;
         }

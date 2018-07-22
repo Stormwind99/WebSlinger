@@ -5,7 +5,6 @@ import java.util.HashMap;
 import com.wumple.webslinger.Reference;
 
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.Name;
 import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.RangeInt;
@@ -18,39 +17,64 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class ConfigContainer
 {
-    @Name("Web melee chance")
-    @Comment("Chance per melee attack that a spider will create a web")
-    @RangeDouble(min = 0.0, max = 1.0)
-    public static double webMeleeChance = 0.15;
-
     @Name("Web replacement")
-    @Comment("Webs replace water, lava, fire, snow, vines, etc. - any replaceable block")
+    @Config.Comment("Webs replace water, lava, fire, snow, vines, etc. - any replaceable block")
     public static boolean allowWebReplacement = true;
 
-    @Name("Sling webbing")
-    @Comment("Spiders can spit webbing from a distance")
-    public static boolean webSlinging = true;
+    @Name("Melee")
+    @Config.Comment("Melee web options")
+    public static Melee melee = new Melee();
 
-    @Name("Sling cooldown")
-    @Comment("Time between web slings")
-    @RangeInt(min = 1)
-    public static int webReshootTime = 45;
+    public static class Melee
+    {
+        @Name("Web melee chance")
+        @Config.Comment("Chance per melee attack that a spider will create a web")
+        @RangeDouble(min = 0.0, max = 1.0)
+        public double webMeleeChance = 0.15;
+    }
+    
+    @Name("Slinging")
+    @Config.Comment("Ranged web slinging options")
+    public static Slinging slinging = new Slinging();
+    
+    public static class Slinging
+    {
+        @Name("Sling webbing")
+        @Config.Comment("Spiders can spit webbing from a distance")
+        public boolean webSlinging = true;
 
-    @Name("Webbing on web")
-    @Comment("Webbing hitting web creates more web")
-    public static boolean webbingOnWeb = false;
+        @Name("Sling cooldown")
+        @Config.Comment("Time between web slings")
+        @RangeInt(min = 1)
+        public int webReshootTime = 45;
 
-    @Name("Sling variance")
-    @Comment("Time variance between a spider's web slings")
-    public static double webSlingVariance = 2.0F;
+        @Name("Sling webbing on web")
+        @Config.Comment("Webbing hitting web creates more web")
+        public boolean webbingOnWeb = false;
 
-    @Name("Sling inaccuracy")
-    @Comment("Inaccuracy of web slings")
-    public static double webSlingInaccuracy = 6.0F;
+        @Name("Sling variance")
+        @Config.Comment("Time variance between a spider's web slings")
+        public double webSlingVariance = 2.0F;
 
-    @Name("Web slingers")
-    @Comment("Things that sling webs")
-    public static HashMap<String, Boolean> slingers = new HashMap<String, Boolean>();
+        @Name("Sling inaccuracy")
+        @Config.Comment("Inaccuracy of web slings")
+        public double webSlingInaccuracy = 6.0F;
+
+        @Name("Slingers")
+        @Config.Comment("Things that sling webs and AI priority, -1 means no slinging")
+        public HashMap<String, Integer> ywebSlingers = new HashMap<String, Integer>();
+    }
+    
+    @Name("Debugging")
+    @Config.Comment("Debugging options")
+    public static Debugging zdebugging = new Debugging();
+
+    public static class Debugging
+    {
+        @Name("Debug mode")
+        @Config.Comment("Enable debug features on this menu, display extra debug info.")
+        public boolean debug = false;
+    }
 
     @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
     private static class EventHandler

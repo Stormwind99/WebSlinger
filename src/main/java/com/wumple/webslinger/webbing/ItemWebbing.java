@@ -1,4 +1,6 @@
-package com.wumple.webslinger;
+package com.wumple.webslinger.webbing;
+
+import com.wumple.webslinger.ObjectHandler;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;

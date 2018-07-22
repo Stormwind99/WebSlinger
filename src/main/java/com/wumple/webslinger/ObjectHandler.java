@@ -1,5 +1,9 @@
 package com.wumple.webslinger;
 
+import com.wumple.util.misc.RegistrationHelpers;
+import com.wumple.webslinger.webbing.EntityWebbing;
+import com.wumple.webslinger.webbing.ItemWebbing;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.init.SoundEvents;
@@ -21,7 +25,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 @ObjectHolder("webslinger")
 public class ObjectHandler
 {
-    private static int entityID = 0;
+    private static int entityID = 1;
 
     // @ObjectHolder("webslinger:webbing")
     public static Item webbing = null;
@@ -40,19 +44,6 @@ public class ObjectHandler
 
             // MAYBE webbing = Item.REGISTRY.getObject(new ResourceLocation("minecraft:web"));
             webbing = regHelper(registry, new ItemWebbing());
-
-            registerTileEntities();
-        }
-
-        @SubscribeEvent
-        public static void registerSoundEvents(RegistryEvent.Register<SoundEvent> event)
-        {
-            // esky_open = registerSound(event.getRegistry(), "foodfunk:esky_open");
-        }
-
-        public static void registerTileEntities()
-        {
-            // registerTileEntity(TileEntityEsky.class, "foodfunk:esky");
         }
 
         @SideOnly(Side.CLIENT)
@@ -63,8 +54,6 @@ public class ObjectHandler
 
             RenderingRegistry.registerEntityRenderingHandler(EntityWebbing.class,
                     manager -> new RenderSnowball<>(manager, webbing, Minecraft.getMinecraft().getRenderItem()));
-
-            // ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFreezer.class, new TileEntityFreezerRenderer());
         }
 
         @SubscribeEvent
@@ -73,7 +62,7 @@ public class ObjectHandler
             registerEntity(event.getRegistry());
         }
 
-        public static void registerEntity(IForgeRegistry<EntityEntry> registry)
+        protected static void registerEntity(IForgeRegistry<EntityEntry> registry)
         {
             EntityEntry entry = EntityEntryBuilder.create()
                     .entity(EntityWebbing.class)

@@ -1,4 +1,8 @@
-package com.wumple.webslinger;
+package com.wumple.webslinger.webbing;
+
+import com.wumple.webslinger.ObjectHandler;
+import com.wumple.webslinger.WebSlinger;
+import com.wumple.webslinger.configuration.ConfigContainer;
 
 import josephcsible.webshooter.PlayerInWebMessage;
 import net.minecraft.block.Block;
@@ -89,7 +93,7 @@ public class EntityWebbing extends EntityThrowable
             if (result.typeOfHit == RayTraceResult.Type.BLOCK)
             {
                 // if hitting another cobweb, don't create web - to avoid massive web areas
-                if (!ModConfig.webbingOnWeb)
+                if (!ConfigContainer.webbingOnWeb)
                 {
                     IBlockState state = world.getBlockState(result.getBlockPos());
                     Block oldBlock = state.getBlock();
@@ -131,7 +135,7 @@ public class EntityWebbing extends EntityThrowable
         if (!worldIn.isRemote)
         {
             entity = new EntityWebbing(worldIn, entityIn);
-            float inaccuracy = (float) ModConfig.webSlingInaccuracy;
+            float inaccuracy = (float) ConfigContainer.webSlingInaccuracy;
             entity.shoot(entityIn, entityIn.rotationPitch, entityIn.rotationYaw, 0.0F, 1.1F, inaccuracy);
             worldIn.spawnEntity(entity);
         }
@@ -146,7 +150,7 @@ public class EntityWebbing extends EntityThrowable
         boolean stick = true;
 
         if (!oldBlock.isReplaceable(world, pos) ||
-                (!ModConfig.allowWebReplacement && !oldBlock.isAir(state, world, pos)))
+                (!ConfigContainer.allowWebReplacement && !oldBlock.isAir(state, world, pos)))
         {
             stick = false;
         }

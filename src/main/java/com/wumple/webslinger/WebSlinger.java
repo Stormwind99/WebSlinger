@@ -3,6 +3,8 @@ package com.wumple.webslinger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.wumple.webslinger.configuration.ConfigHandler;
+
 import josephcsible.webshooter.PlayerInWebMessage;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -13,7 +15,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = Reference.DEPENDENCIES, updateJSON = Reference.UPDATEJSON, certificateFingerprint = Reference.FINGERPRINT)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = Reference.DEPENDENCIES,
+        updateJSON = Reference.UPDATEJSON, certificateFingerprint = Reference.FINGERPRINT)
 public class WebSlinger
 {
     @Mod.Instance(Reference.MOD_ID)
@@ -27,6 +30,8 @@ public class WebSlinger
     {
         logger = event.getModLog();
 
+        com.wumple.webslinger.capability.WebSlinger.register();
+
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         PlayerInWebMessage.register(networkWrapper);
     }
@@ -39,6 +44,7 @@ public class WebSlinger
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
+        ConfigHandler.init();
     }
 
     @EventHandler

@@ -1,11 +1,13 @@
-package com.wumple.webslinger;
+package com.wumple.webslinger.webbing;
+
+import com.wumple.webslinger.configuration.ConfigContainer;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.world.World;
 
-class AIWebbingAttack extends EntityAIBase
+public class AIWebbingAttack extends EntityAIBase
 {
     private final static double maxDistance = 256.0D; // 16 is 256, 32 is 1024, 64 is 4096
     private final EntityLiving parentEntity;
@@ -60,14 +62,14 @@ class AIWebbingAttack extends EntityAIBase
              * // MAYBE play pre-shoot event if (this.attackTimer == (reshootTime/2)) { world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0); }
              */
 
-            if (this.attackTimer == ModConfig.webReshootTime)
+            if (this.attackTimer == ConfigContainer.webReshootTime)
             {
                 // MAYBE source.world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0);
 
                 EntityWebbing.sling(world, parentEntity);
 
-                double cooldown = ModConfig.webReshootTime +
-                        ModConfig.webReshootTime * world.rand.nextFloat() * ModConfig.webSlingVariance;
+                double cooldown = ConfigContainer.webReshootTime +
+                        ConfigContainer.webReshootTime * world.rand.nextFloat() * ConfigContainer.webSlingVariance;
 
                 this.attackTimer -= cooldown;
 

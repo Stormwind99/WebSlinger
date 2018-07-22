@@ -1,4 +1,8 @@
-package com.wumple.webslinger;
+package com.wumple.webslinger.configuration;
+
+import java.util.HashMap;
+
+import com.wumple.webslinger.Reference;
 
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
@@ -12,7 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = Reference.MOD_ID)
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
-public class ModConfig
+public class ConfigContainer
 {
     @Name("Web melee chance")
     @Comment("Chance per melee attack that a spider will create a web")
@@ -43,6 +47,10 @@ public class ModConfig
     @Name("Sling inaccuracy")
     @Comment("Inaccuracy of web slings")
     public static double webSlingInaccuracy = 6.0F;
+
+    @Name("Web slingers")
+    @Comment("Things that sling webs")
+    public static HashMap<String, Boolean> slingers = new HashMap<String, Boolean>();
 
     @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
     private static class EventHandler

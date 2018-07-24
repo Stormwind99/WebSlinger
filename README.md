@@ -4,12 +4,13 @@ Spiders shoot webbing at you - slinging webs from a distance, or when they hit y
 
 Be careful!  This makes spiders more difficult foes, since you get stuck in the webbing.
 
-![Web Slinger Example](https://github.com/Stormwind99/WebSlinger/raw/newmaster/other/screenshots/WebSlingerExample.gif)
+![Web Slinger Example](https://github.com/Stormwind99/WebSlinger/raw/master/other/screenshots/WebSlingerExample.gif)
 
 ## FAQ
 
-1. How to I make my mod's spiders also sling webs?
-
+1. How to I make my mod's spiders also sling webs?  There are several different options:
+   * In the mod configuration, add the mob to the `Slinging:slingers` list.
+   * Add the `webslinger:webslinger` capability to the mob.
    * Subclass `EntitySpider` for your new spider - see `EntityCaveSpider` in vanilla MC for an example.
    * Adding the AIWebbingAttack task to an entity is another method: `entity.tasks.addTask(7, new AIWebbingAttack(entity));`
 

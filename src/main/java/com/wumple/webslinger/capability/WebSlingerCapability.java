@@ -3,7 +3,7 @@ package com.wumple.webslinger.capability;
 import com.wumple.util.Reference;
 import com.wumple.util.adapter.EntityThing;
 import com.wumple.util.adapter.IThing;
-import com.wumple.util.misc.Util;
+import com.wumple.util.base.misc.Util;
 import com.wumple.webslinger.configuration.ConfigContainer;
 import com.wumple.webslinger.webbing.AIWebbingAttack;
 import com.wumple.webslinger.webbing.EntityWebbing;

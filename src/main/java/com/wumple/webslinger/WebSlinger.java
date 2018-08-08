@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.wumple.util.mod.ModBase;
 import com.wumple.webslinger.configuration.ConfigHandler;
+import com.wumple.webslinger.webbing.PlayerInWebMessage;
 
-import josephcsible.webshooter.PlayerInWebMessage;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;

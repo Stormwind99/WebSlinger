@@ -4,7 +4,6 @@ import com.wumple.webslinger.ObjectHandler;
 import com.wumple.webslinger.WebSlinger;
 import com.wumple.webslinger.configuration.ConfigContainer;
 
-import josephcsible.webshooter.PlayerInWebMessage;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;

@@ -1,9 +1,8 @@
 package com.wumple.webslinger.configuration;
 
-import com.wumple.webslinger.Reference;
 import com.wumple.util.config.MatchingConfig;
-//import com.wumple.util.config.MatchingConfigBase;
-import com.wumple.util.config.MatchingConfigBase;
+import com.wumple.util.config.NameKeys;
+import com.wumple.webslinger.Reference;
 
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -30,7 +29,7 @@ public class ConfigHandler
     
     public void init()
     {
-        webSlingers.addDefaultProperty(MatchingConfigBase.SPIDER_TAG, 3);
+        webSlingers.addDefaultProperty(NameKeys.SPIDER_TAG, 3);
 
         ConfigManager.sync(Reference.MOD_ID, Config.Type.INSTANCE);
      }

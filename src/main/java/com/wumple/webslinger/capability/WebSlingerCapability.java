@@ -1,16 +1,13 @@
 package com.wumple.webslinger.capability;
 
 import com.wumple.util.Reference;
-import com.wumple.util.adapter.EntityThing;
-import com.wumple.util.adapter.IThing;
-import com.wumple.util.base.misc.Util;
-import com.wumple.webslinger.configuration.ConfigContainer;
-import com.wumple.webslinger.webbing.AIWebbingAttack;
-import com.wumple.webslinger.webbing.EntityWebbing;
+import com.wumple.webslinger.ConfigManager;
+import com.wumple.webslinger.webbing.WebbingAttackGoal;
+import com.wumple.webslinger.webbing.WebbingEntity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,91 +16,79 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-//@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 @Mod.EventBusSubscriber
 public class WebSlingerCapability implements IWebSlinger
 {
-    // The {@link Capability} instance
+	public static ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "webslinger");
+	
     @CapabilityInject(IWebSlinger.class)
-    public static final Capability<IWebSlinger> CAPABILITY = null;
-    public static final EnumFacing DEFAULT_FACING = null;
-
-    // IDs of the capability
-    public static final ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "webslinger");
-
+    public static final Capability<IWebSlinger> CAP = null;
+	
     /// Data
-    IThing owner = null;
-
+    LivingEntity owner = null;
+    int priority;
+    
     @Override
-    public void checkInit(IThing ownerIn, int taskPriority)
+    public void checkInit(LivingEntity ownerIn, int taskPriority)
     {
         if (owner != ownerIn)
         {
             owner = ownerIn;
+            priority = taskPriority;
 
-            initialize(taskPriority);
+            initialize(owner, priority);
         }
     }
-
-    protected EntityLiving getOwner()
+    
+    protected LivingEntity getOwner()
     {
-        if (owner instanceof EntityThing)
-        {
-            EntityThing thing = Util.as(owner, EntityThing.class);
-            EntityLiving living = Util.as(thing.owner, EntityLiving.class);
-            return living;
-        }
-
-        return null;
+    	return owner;
     }
-
-    protected void initialize(int taskPriority)
+    
+    protected static void initialize(LivingEntity ownerIn, int priorityIn)
     {
-        if (ConfigContainer.slinging.webSlinging == true)
+        if (ConfigManager.General.webSlinging.get() == true)
         {
-            EntityLiving living = getOwner();
+        	MobEntity living = (MobEntity)ownerIn;
             if (living != null)
             {
-                living.tasks.addTask(taskPriority, new AIWebbingAttack(living));
+            	living.goalSelector.addGoal(priorityIn, new WebbingAttackGoal(ownerIn));
             }
         }
     }
-
+    
     // ----------------------------------------------------------------------
     // Init
 
     public static void register()
     {
-        CapabilityManager.INSTANCE.register(IWebSlinger.class, new WebSlingerStorage(), () -> new WebSlingerCapability());
+		CapabilityManager.INSTANCE.register(IWebSlinger.class, new WebSlingerStorage(), WebSlingerCapability::new);
     }
 
-    WebSlingerCapability()
+    public WebSlingerCapability()
     {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    WebSlingerCapability(IThing ownerIn, int taskPriority)
+    public WebSlingerCapability(LivingEntity ownerIn, int priorityIn)
     {
         this();
-        checkInit(ownerIn, taskPriority);
+        checkInit(ownerIn, priorityIn);
     }
 
     // ----------------------------------------------------------------------
     // Events
 
-    /*
-     * Handle melee webbing attack for spiders
-     */
     @SubscribeEvent
     public void onLivingAttack(LivingAttackEvent event)
     {
         Entity immediateSource = event.getSource().getImmediateSource();
         Entity trueSource = event.getSource().getTrueSource();
         Entity target = event.getEntity();
-        EntityLiving myowner = getOwner();
+        LivingEntity myowner = getOwner();
 
         // if web is shot, let EntityWebbing handle it - so immediateSource and trueSource must be spider
         if ((immediateSource != null) && (myowner != null) && (immediateSource == myowner) && (immediateSource == trueSource))
@@ -116,9 +101,12 @@ public class WebSlingerCapability implements IWebSlinger
     {
         World world = target.world;
      
-        if (ConfigContainer.melee.webMeleeChance <= world.rand.nextDouble())
+        double threshold = ConfigManager.General.webMeleeChance.get();
+        double chance = world.rand.nextDouble();
+        
+        if (threshold <= chance)
         {
-            return;
+        	return;
         }
 
         if ((target != null) && (immediateSource != null))
@@ -135,6 +123,7 @@ public class WebSlingerCapability implements IWebSlinger
         
         BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
 
-        EntityWebbing.onHit(world, pos, source, target);
+        WebbingEntity.onHit(world, pos, source, target);
     }
+
 }

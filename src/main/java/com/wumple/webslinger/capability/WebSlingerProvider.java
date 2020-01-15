@@ -1,37 +1,27 @@
 package com.wumple.webslinger.capability;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.wumple.util.adapter.IThing;
-import com.wumple.util.container.capabilitylistener.SimpleCapabilityProvider;
-
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 
-public class WebSlingerProvider extends SimpleCapabilityProvider<IWebSlinger>
+public class WebSlingerProvider implements ICapabilityProvider
 {
-    IThing owner = null;
+    LivingEntity owner = null;
     int taskPriority = -1;
 
-    public WebSlingerProvider(Capability<IWebSlinger> capability, @Nullable EnumFacing facing, IThing ownerIn, int taskPriorityIn)
+    public WebSlingerProvider(LivingEntity ownerIn, int taskPriorityIn)
     {
-        super(capability, facing, (capability != null) ? capability.getDefaultInstance() : null);
         owner = ownerIn;
         taskPriority = taskPriorityIn;
     }
-
-    public WebSlingerProvider(Capability<IWebSlinger> capability, @Nullable EnumFacing facing, IWebSlinger instance,
-            IThing ownerIn, int taskPriorityIn)
+    
+    public @Nonnull <T> LazyOptional<T> getCapability(@Nonnull final Capability<T> cap, final @Nullable Direction side)
     {
-        super(capability, facing, instance);
-        owner = ownerIn;
-        taskPriority = taskPriorityIn;
-    }
-
-    public final IWebSlinger getInstance()
-    {
-        IWebSlinger cap = super.getInstance();
-        cap.checkInit(owner, taskPriority);
-        return cap;
+    	 return LazyOptional.of(() -> new WebSlingerCapability(owner, taskPriority)).cast();
     }
 }

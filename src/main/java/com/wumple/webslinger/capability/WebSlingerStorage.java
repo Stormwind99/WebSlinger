@@ -1,17 +1,17 @@
 package com.wumple.webslinger.capability;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 
 public class WebSlingerStorage implements IStorage<IWebSlinger>
 {
     @Override
-    public NBTBase writeNBT(Capability<IWebSlinger> capability, IWebSlinger instance, EnumFacing side)
+    public INBT writeNBT(Capability<IWebSlinger> capability, IWebSlinger instance, Direction side)
     {
-        NBTTagCompound tags = new NBTTagCompound();
+        CompoundNBT tags = new CompoundNBT();
 
         if (instance != null)
         {
@@ -22,9 +22,9 @@ public class WebSlingerStorage implements IStorage<IWebSlinger>
     }
 
     @Override
-    public void readNBT(Capability<IWebSlinger> capability, IWebSlinger instance, EnumFacing side, NBTBase nbt)
+    public void readNBT(Capability<IWebSlinger> capability, IWebSlinger instance, Direction side, INBT nbt)
     {
-        NBTTagCompound tags = (NBTTagCompound) nbt;
+        CompoundNBT tags = (CompoundNBT) nbt;
 
         if ((tags != null) && (instance != null))
         {

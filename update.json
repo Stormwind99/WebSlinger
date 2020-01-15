@@ -1,10 +1,11 @@
 {
   "homepage": "https://github.com/Stormwind99/WebSlinger",
   "promos": {
-    "1.12.2-latest": "2.2.4",
-    "1.12.2-recommended": "2.2.4"
+    "1.12.2-latest": "2.2.5",
+    "1.12.2-recommended": "2.2.5"
   },
   "1.12.2": {
+    "2.2.5": "Updated Forge version, etc",
     "2.2.4": "Library update",
     "2.2.3": "Moved PlayerInWebMessage into wumple namespace to avoid name conflict crash",
     "2.2.2": "Library update",

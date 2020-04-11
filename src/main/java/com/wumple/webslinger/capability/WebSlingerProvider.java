@@ -1,27 +1,44 @@
 package com.wumple.webslinger.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class WebSlingerProvider implements ICapabilityProvider
+public class WebSlingerProvider implements ICapabilitySerializable<INBT> // implements ICapabilityProvider
 {
-    LivingEntity owner = null;
-    int taskPriority = -1;
+	IWebSlinger capInstance;
+	LazyOptional<IWebSlinger> cap_provider;
 
-    public WebSlingerProvider(LivingEntity ownerIn, int taskPriorityIn)
-    {
-        owner = ownerIn;
-        taskPriority = taskPriorityIn;
-    }
-    
-    public @Nonnull <T> LazyOptional<T> getCapability(@Nonnull final Capability<T> cap, final @Nullable Direction side)
-    {
-    	 return LazyOptional.of(() -> new WebSlingerCapability(owner, taskPriority)).cast();
-    }
+	@CapabilityInject(IWebSlinger.class)
+	public static final Capability<IWebSlinger> CAPABILITY = null;
+
+	public WebSlingerProvider(LivingEntity ownerIn, int taskPriorityIn)
+	{
+		capInstance = new WebSlingerCapability(ownerIn, taskPriorityIn);
+		cap_provider = LazyOptional.of(() -> capInstance);
+	}
+
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction side)
+	{
+		if (capability == WebSlingerCapability.CAPABILITY)
+			return cap_provider.cast();
+		return LazyOptional.empty();
+	}
+
+	@Override
+	public INBT serializeNBT()
+	{
+		return CAPABILITY.writeNBT(capInstance, WebSlingerCapability.DEFAULT_FACING);
+	}
+
+	@Override
+	public void deserializeNBT(INBT nbt)
+	{
+		CAPABILITY.readNBT(capInstance, WebSlingerCapability.DEFAULT_FACING, nbt);
+	}
 }

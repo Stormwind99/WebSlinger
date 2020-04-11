@@ -43,24 +43,6 @@ public class EventHandler
 			LivingEntity livingEntity = (LivingEntity) entity;
 			WebSlingerProvider provider = new WebSlingerProvider(livingEntity, priority);
 			event.addCapability(WebSlingerCapability.ID, provider);
-
-			// make capability be created and initialized ASAP since it adds goals, event handlers, etc
-			// but needs deferred until after entity ctors finish (since attachCapabilitiesEntity occurs
-			// during construction)
-			MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-			if (server != null)
-			{
-				server.deferTask(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						LazyOptional<IWebSlinger> cap = livingEntity.getCapability(WebSlingerCapability.CAP);
-						cap.ifPresent((x) -> {
-						});
-					}
-				});
-			}
 		}
 	}
 }

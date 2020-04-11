@@ -1,17 +1,19 @@
 package com.wumple.webslinger.capability;
 
-import com.wumple.webslinger.ConfigManager;
+import com.wumple.util.adapter.EntityThing;
+import com.wumple.util.adapter.IThing;
+import com.wumple.util.base.misc.Util;
 import com.wumple.webslinger.Reference;
+import com.wumple.webslinger.configuration.ConfigHandler;
+import com.wumple.webslinger.configuration.ModConfiguration;
 import com.wumple.webslinger.webbing.WebbingAttackGoal;
 import com.wumple.webslinger.webbing.WebbingEntity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.concurrent.TickDelayedTask;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,8 +22,6 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
@@ -35,53 +35,47 @@ public class WebSlingerCapability implements IWebSlinger
 	public static final Direction DEFAULT_FACING = null;
 
 	/// Data
-	LivingEntity owner = null;
+	IThing owner = null;
 	int priority;
 
 	@Override
-	public void checkInit(LivingEntity ownerIn, int taskPriority)
+	public void checkInit(IThing ownerIn, int taskPriority)
 	{
 		if (owner != ownerIn)
 		{
 			owner = ownerIn;
 			priority = taskPriority;
-
-			initialize(owner, priority);
 		}
 	}
 
 	protected LivingEntity getOwner()
 	{
-		return owner;
+		if (owner instanceof EntityThing)
+		{
+			EntityThing thing = Util.as(owner, EntityThing.class);
+			LivingEntity living = Util.as(thing.get(), LivingEntity.class);
+			return living;
+		}
+
+		return null;
 	}
 
-	protected static void initialize(LivingEntity ownerIn, int priorityIn)
-    {
-		// delay calling MobEntity.goalSelector.addGoal() since we are called from 
-		// the AttachCapabilitiesEvent which is fired via the Entity constructor 
-		// before MobEntity.goalSelector is initialized.
-		// Alt solution: addGoal in EntityJoinWorldEvent handler
-    	MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-		if (server != null)
+	// why called by EntityJoinWorldEvent handler rather than WebSlingerCapability ctor?
+	// must call MobEntity.goalSelector.addGoal() later than  
+	// the AttachCapabilitiesEvent because it is fired via the Entity constructor 
+	// before MobEntity.goalSelector is initialized.
+	public void handleAISetup()
+	{
+		if (ConfigHandler.isEnabled())
 		{
-			server.enqueue(new TickDelayedTask(server.getTickCounter(), 
-					new Runnable()
+			LivingEntity living = getOwner();
+			MobEntity mob = Util.as(living, MobEntity.class);
+			if (mob != null)
 			{
-				@Override
-				public void run()
-				{		
-			        if (ConfigManager.General.webSlinging.get() == true)
-			        {
-			        	MobEntity living = (MobEntity)ownerIn;
-			            if (living != null)
-			            {
-			            	living.goalSelector.addGoal(priorityIn, new WebbingAttackGoal(ownerIn));
-			            }
-			        }
-				}
-			}));
+				mob.goalSelector.addGoal(priority, new WebbingAttackGoal(living));
+			}
 		}
-    }
+	}
 
 	// ----------------------------------------------------------------------
 	// Init
@@ -96,7 +90,7 @@ public class WebSlingerCapability implements IWebSlinger
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
-	public WebSlingerCapability(LivingEntity ownerIn, int priorityIn)
+	public WebSlingerCapability(IThing ownerIn, int priorityIn)
 	{
 		this();
 		checkInit(ownerIn, priorityIn);
@@ -125,7 +119,7 @@ public class WebSlingerCapability implements IWebSlinger
 	{
 		World world = target.world;
 
-		double threshold = ConfigManager.General.webMeleeChance.get();
+		double threshold = ModConfiguration.General.webMeleeChance.get();
 		double chance = world.rand.nextDouble();
 
 		if (threshold <= chance)

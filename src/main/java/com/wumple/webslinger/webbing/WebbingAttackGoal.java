@@ -1,6 +1,6 @@
 package com.wumple.webslinger.webbing;
 
-import com.wumple.webslinger.ConfigManager;
+import com.wumple.webslinger.configuration.ModConfiguration;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -78,14 +78,14 @@ public class WebbingAttackGoal extends Goal
 			 * // MAYBE play pre-shoot event if (this.attackTimer == (reshootTime/2)) { world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0); }
 			 */
 
-			if (this.attackTimer >= ConfigManager.General.webReshootTime.get())
+			if (this.attackTimer >= ModConfiguration.General.webReshootTime.get())
 			{
 				// MAYBE source.world.playEvent((EntityPlayer)null, effect, new BlockPos(this.parentEntity), 0);
 
 				WebbingEntity.sling(world, attacker);
 
-				double cooldown = ConfigManager.General.webReshootTime.get() + ConfigManager.General.webReshootTime.get()
-						* world.rand.nextFloat() * ConfigManager.General.webSlingVariance.get();
+				double cooldown = ModConfiguration.General.webReshootTime.get() + ModConfiguration.General.webReshootTime.get()
+						* world.rand.nextFloat() * ModConfiguration.General.webSlingVariance.get();
 
 				this.attackTimer -= cooldown;
 

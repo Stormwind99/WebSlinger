@@ -1,6 +1,7 @@
 package com.wumple.webslinger.capability;
 
-import net.minecraft.entity.LivingEntity;
+import com.wumple.util.adapter.IThing;
+
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -16,7 +17,7 @@ public class WebSlingerProvider implements ICapabilitySerializable<INBT> // impl
 	@CapabilityInject(IWebSlinger.class)
 	public static final Capability<IWebSlinger> CAPABILITY = null;
 
-	public WebSlingerProvider(LivingEntity ownerIn, int taskPriorityIn)
+	public WebSlingerProvider(IThing ownerIn, int taskPriorityIn)
 	{
 		capInstance = new WebSlingerCapability(ownerIn, taskPriorityIn);
 		cap_provider = LazyOptional.of(() -> capInstance);

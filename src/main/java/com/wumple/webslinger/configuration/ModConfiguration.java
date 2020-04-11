@@ -1,9 +1,12 @@
-package com.wumple.webslinger;
+package com.wumple.webslinger.configuration;
 
 import java.nio.file.Path;
 
+import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import com.wumple.util.config.ConfigUtil;
+import com.wumple.webslinger.Reference;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,8 +19,8 @@ import net.minecraftforge.fml.loading.FMLPaths;
 // https://github.com/McJty/YouTubeModding14/blob/master/src/main/java/com/mcjty/mytutorial/Config.java
 // https://wiki.mcjty.eu/modding/index.php?title=Tut14_Ep6
 
-@Mod.EventBusSubscriber
-public class ConfigManager
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+public class ModConfiguration
 {
 	private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
 	private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
@@ -37,6 +40,7 @@ public class ConfigManager
 		public static ForgeConfigSpec.BooleanValue webbingOnWeb;
 		public static ForgeConfigSpec.DoubleValue webSlingVariance;
 		public static ForgeConfigSpec.DoubleValue webSlingInaccuracy;
+		public static ForgeConfigSpec.ConfigValue<Config> webSlingers;
 
 		private static void setupConfig()
 		{
@@ -77,12 +81,10 @@ public class ConfigManager
 					.comment("Inaccuracy of web slings")
 					.defineInRange("webSlingInaccuracy", 6.0F, 0F, Double.MAX_VALUE);
 
-			/*
-			// TODO
-			@Name("Slingers")
-	    	@Config.Comment("Things that sling webs and AI priority, -1 means no slinging")
-	    	public HashMap<String, Integer> ywebSlingers = new HashMap<String, Integer>();
-			 */
+			// default -1
+			// @Name("Slingers")
+			webSlingers = ConfigUtil.buildSet(COMMON_BUILDER, "webSlingers",
+					"Things that sling webs and AI priority, -1 means no slinging (min -1)");
 
 			COMMON_BUILDER.pop();
 		}
@@ -123,7 +125,7 @@ public class ConfigManager
 		configData.load();
 		spec.setConfig(configData);
 	}
-
+	
 	@SubscribeEvent
 	public static void onLoad(final ModConfig.Loading configEvent)
 	{
@@ -139,7 +141,24 @@ public class ConfigManager
 		context.registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG);
 		context.registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
 
-		loadConfig(ConfigManager.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Reference.MOD_ID + "-client.toml"));
-		loadConfig(ConfigManager.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Reference.MOD_ID + "-common.toml"));
+		loadConfig(ModConfiguration.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Reference.MOD_ID + "-client.toml"));
+		loadConfig(ModConfiguration.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Reference.MOD_ID + "-common.toml"));
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	@SubscribeEvent
+	public static void modConfig(ModConfig.ModConfigEvent event)
+	{
+		ModConfig config = event.getConfig();
+		if (config.getSpec() != COMMON_CONFIG)
+			return;
+
+		ConfigHandler.init();
+		
+		ConfigUtil.handleConfigSet(General.webSlingers.get(), c -> {
+		}, ConfigHandler.webSlingers.getMap());
+		
+		ConfigHandler.postinit();
 	}
 }

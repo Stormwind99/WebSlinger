@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import com.wumple.webslinger.capability.IWebSlinger;
 import com.wumple.webslinger.capability.WebSlingerCapability;
 import com.wumple.webslinger.capability.WebSlingerStorage;
+import com.wumple.webslinger.configuration.ModConfiguration;
 import com.wumple.webslinger.webbing.WebbingItem;
 
 import net.minecraft.entity.EntityType;
@@ -53,7 +54,7 @@ public class WebSlinger
 
 	public WebSlinger()
 	{
-		ConfigManager.register(ModLoadingContext.get());
+		ModConfiguration.register(ModLoadingContext.get());
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addGenericListener(Item.class, this::registerItems);

@@ -1,48 +1,57 @@
 package com.wumple.webslinger.capability;
 
+import com.wumple.util.adapter.EntityThing;
+import com.wumple.util.adapter.TileEntityThing;
+import com.wumple.webslinger.configuration.ConfigHandler;
+
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class EventHandler
 {
-	/*
-	// TODO
 	@SubscribeEvent
 	public static void attachCapabilitiesTileEntity(AttachCapabilitiesEvent<TileEntity> event)
 	{
-	    TileEntity entity = event.getObject();
-	
-	    int priority = ConfigHandler.getInstance().webSlingers.getValue(entity);
-	    
-	    if (ConfigHandler.getInstance().webSlingers.doesIt(priority))
-	    {
-	        WebSlingerProvider provider = new WebSlingerProvider(WebSlingerCapability.CAPABILITY, WebSlingerCapability.DEFAULT_FACING, new TileEntityThing(entity), priority);
-	        event.addCapability(WebSlingerCapability.ID, provider);
-	    }
+		if (ConfigHandler.isEnabled())
+		{
+			TileEntity entity = event.getObject();
+			int priority = ConfigHandler.webSlingers.getValue(entity);
+
+			if (ConfigHandler.doesItSling(priority))
+			{
+				WebSlingerProvider provider = new WebSlingerProvider(new TileEntityThing(entity), priority);
+				event.addCapability(WebSlingerCapability.ID, provider);
+			}
+		}
 	}
-	*/
 
 	@SubscribeEvent
 	public static void attachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event)
 	{
-		Entity entity = event.getObject();
-
-		int priority = 3; // ConfigHandler.getInstance().webSlingers.getValue(entity);
-
-		if (entity instanceof SpiderEntity) // TODO ConfigHandler.getInstance().webSlingers.doesIt(priority))
+		if (ConfigHandler.isEnabled())
 		{
-			LivingEntity livingEntity = (LivingEntity) entity;
-			WebSlingerProvider provider = new WebSlingerProvider(livingEntity, priority);
-			event.addCapability(WebSlingerCapability.ID, provider);
+			Entity entity = event.getObject();
+			int priority = ConfigHandler.webSlingers.getValue(entity);
+
+			if (ConfigHandler.doesItSling(priority))
+			{
+				WebSlingerProvider provider = new WebSlingerProvider(new EntityThing(entity), priority);
+				event.addCapability(WebSlingerCapability.ID, provider);
+			}
 		}
+	}
+	
+	@SubscribeEvent
+	public static void entityJoinWorldEventHandler(EntityJoinWorldEvent event)
+	{
+		Entity entity = event.getEntity();
+		LazyOptional<IWebSlinger> cap = entity.getCapability(WebSlingerCapability.CAPABILITY);
+		cap.ifPresent((x) -> { x.handleAISetup(); } );
 	}
 }

@@ -1,8 +1,9 @@
 package com.wumple.webslinger.capability;
 
-import net.minecraft.entity.LivingEntity;
+import com.wumple.util.adapter.IThing;
 
 public interface IWebSlinger
 {
-	void checkInit(LivingEntity ownerIn, int taskPriority);
+	void checkInit(IThing ownerIn, int taskPriority);
+	void handleAISetup();
 }

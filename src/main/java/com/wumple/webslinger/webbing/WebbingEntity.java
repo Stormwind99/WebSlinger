@@ -2,10 +2,10 @@ package com.wumple.webslinger.webbing;
 
 import org.apache.logging.log4j.LogManager;
 
-import com.wumple.webslinger.ConfigManager;
 import com.wumple.webslinger.ObjectHandler;
 import com.wumple.webslinger.Reference;
 import com.wumple.webslinger.WebSlinger;
+import com.wumple.webslinger.configuration.ModConfiguration;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -97,7 +97,7 @@ public class WebbingEntity extends ProjectileItemEntity implements IRendersAsIte
 				BlockPos blockpos = rayTraceResult.getPos();
 
 				// if hitting another cobweb, don't create web - to avoid massive web areas
-				if (!ConfigManager.General.webbingOnWeb.get())
+				if (!ModConfiguration.General.webbingOnWeb.get())
 				{
 					BlockState state = world.getBlockState(blockpos);
 					Block oldBlock = state.getBlock();
@@ -169,7 +169,7 @@ public class WebbingEntity extends ProjectileItemEntity implements IRendersAsIte
 		if (!worldIn.isRemote)
 		{
 			entity = new WebbingEntity(entityIn, worldIn);
-			double inaccuracy = ConfigManager.General.webSlingInaccuracy.get();
+			double inaccuracy = ModConfiguration.General.webSlingInaccuracy.get();
 			entity.shoot(entityIn, entityIn.rotationPitch, entityIn.rotationYaw, 0.0F, 1.1F, (float) inaccuracy);
 			worldIn.addEntity(entity);
 		}
@@ -184,7 +184,7 @@ public class WebbingEntity extends ProjectileItemEntity implements IRendersAsIte
 		boolean stick = true;
 
 		if (!state.getMaterial().isReplaceable()
-				|| (!ConfigManager.General.allowWebReplacement.get() && !oldBlock.isAir(state, world, pos)))
+				|| (!ModConfiguration.General.allowWebReplacement.get() && !oldBlock.isAir(state, world, pos)))
 		{
 			stick = false;
 		}
@@ -204,7 +204,7 @@ public class WebbingEntity extends ProjectileItemEntity implements IRendersAsIte
 			return;
 		}
 
-		if (ConfigManager.Debugging.debug.get())
+		if (ModConfiguration.Debugging.debug.get())
 		{
 			LogManager.getLogger(Reference.MOD_ID).info("Making cobweb at " + pos.toString());
 		}

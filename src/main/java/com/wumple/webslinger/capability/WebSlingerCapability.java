@@ -1,6 +1,6 @@
 package com.wumple.webslinger.capability;
 
-import com.wumple.util.Reference;
+import com.wumple.webslinger.Reference;
 import com.wumple.webslinger.ConfigManager;
 import com.wumple.webslinger.webbing.WebbingAttackGoal;
 import com.wumple.webslinger.webbing.WebbingEntity;
